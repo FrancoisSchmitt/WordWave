@@ -5,6 +5,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const databaseLogin = require("./database/index");
+const authRoutes = require("./routes/auth");
+
 /**
  * .env added for hidden PORT urls
  * using bodyParser to format in Json
@@ -30,6 +32,8 @@ app.use((req, res, next) => {
 	res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 	next();
 });
+
+app.use("/auth", authRoutes);
 
 databaseLogin();
 
