@@ -3,19 +3,25 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import './index.css'
-// import Header from "./components/layout/header";
+import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
 
 import Home from "./pages/home";
+import Register from "./pages/register";
+import Login from "./pages/login";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
 	<React.StrictMode>
-    <BrowserRouter>
+		<BrowserRouter>
+			<Header />
 			<Routes>
-			{/* <Route element={<Header />} /> */}
+				{/* <Route element={<Header />} /> */}
 				<Route path="/" element={<Home />} />
+				<Route path="/login" element={<Login />} />
+				<Route path="/register" element={<Register />} />
 			</Routes>
 			<Footer />
 		</BrowserRouter>
