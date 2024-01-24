@@ -2,10 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { Login } from "../../services/users";
+import { token } from "../../store/actions";
 
 export default function LoginComp() {
+	const userRef = useRef();
+	const errRef = useRef();
+	const dispatch = useDispatch();
 	const Navigate = useNavigate();
-	// const dispatch = useDispatch();
 
 	const [email, setEmail] = useState("");
 	const [validEmail, setValidEmail] = useState(false);
@@ -15,106 +18,134 @@ export default function LoginComp() {
 	const [validPassword, setValidPassword] = useState(false);
 	const [passwordFocus, setPasswordFocus] = useState(false);
 
-	const [status, setStatus] = useState(false);
-	const [messageError, setMessageError] = useState(false);
+	const [status, setStatus] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
 
 	const EMAIL_REGEX =
 		/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+	const PASSWORD_REGEX =
+		/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/;
+
+	const tokenSelector = useSelector((state) => state.authTokens?.value);
+
 
 	const inputIsFilled = (input) => {
-		return input.lenght >= 4;
+		return input.length >= 4;
 	};
-	const initialState = () => {
+
+	const initialStates = () => {
 		setEmail("");
 		setPassword("");
 	};
-	console.log(email, password);
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
+	const handleSubmit = (event) => {
+		event.preventDefault();
 		const rxEmail = EMAIL_REGEX.test(email);
 		const rxPassword = PASSWORD_REGEX.test(password);
 
-		const userLogin = Login({ email: email, password: password });
-		userLogin
-			.then((loginResult) => {
-				if (
-					loginResult.status === 200 &&
-					inputIsFilled(email) &&
-					inputIsFilled(password) &&
-					rxEmail &&
-					rxPassword
-				) {
-					setStatus(loginResult);
-					console.log(loginResult.token);
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-				initialState();
-				setMessageError("Warning some field are not filled in!");
-			});
+		const log = Login({ email: email, password: password });
+		log.then((results) => {
+			if (
+				results.status === 200 &&
+				inputIsFilled(email) &&
+				inputIsFilled(password) &&
+				rxEmail &&
+				rxPassword
+			) {
+				setStatus(results.status);
+				dispatch(token(results.token));
+				console.log(results.token);
+			} else {
+				console.log(results);
+				initialStates();
+				setErrorMessage("Your email with your password are wrong");
+			}
+			errRef.current.focus();
+		});
 	};
+
+	useEffect(() => {
+		userRef.current.focus();
+	}, []);
 
 	useEffect(() => {
 		setValidEmail(EMAIL_REGEX.test(email));
 	}, [email]);
+
 	useEffect(() => {
 		setValidPassword(PASSWORD_REGEX.test(password));
 	}, [password]);
 
-	// useEffect(() => {
-	// 	if()
-	// })
+	useEffect(() => {
+		if (tokenSelector !== "" && status === 200) {
+			Navigate("/");
+		}
+	}, [tokenSelector, status, Navigate]);
 
 	return (
 		<>
-			<div className="flex flex-col justify-center	 shadow-3xl  py-20 w-4/6 ">
+			<div className="flex flex-col justify-center shadow-3xl  py-20 w-4/6 ">
 				<form onSubmit={handleSubmit}>
-					<div className="flex mb-6 w-4/6 mx-auto">
+					<p
+						ref={errRef}
+						className={errorMessage ? "errorMessage" : "offscreen"}
+						aria-live="assertive"
+					>
+						{errorMessage}
+					</p>
+					<div className="flex flex-col mb-6 w-4/6 mx-9">
 						<label htmlFor="email" className="hidden">
-							email
+							Email
 						</label>
 						<input
-							className="h-10 w-80 text-center border rounded-lg border-black"
+							className="flex items-center justify-center h-10 w-80  mb-4 text-white text-center rounded-lg border border-black"
 							type="email"
-							name="email"
-							placeholder="Your Email"
 							id="email"
 							value={email}
-							// ref={userRef}
-							onChange={(e) => setEmail(e.target.value)}
-							autoComplete="off"
+							ref={userRef}
 							aria-invalid={validEmail ? "false" : "true"}
+							onChange={(e) => setEmail(e.target.value)}
+							required
+							autoComplete="off"
+							aria-describedby="emailnote"
 							onFocus={() => setEmailFocus(true)}
 							onBlur={() => setEmailFocus(false)}
-							required
+							placeholder="Your Email"
 						/>
+						{emailFocus && !validEmail && (
+							<small id="emailnote" className="text-red-500">
+								The email must follow this example: example@example.com
+							</small>
+						)}
 					</div>
-					<div className="flex mb-6 w-4/6 mx-auto">
+					<div className="flex flex-col mb-6 w-4/6 mx-9">
 						<label htmlFor="password" className="hidden">
-							password
+							Password
 						</label>
 						<input
-							className="h-10 w-80 text-center border rounded-lg border-black"
+							className="flex items-center justify-center h-10 w-80 mx-auto mb-4 text-white text-center rounded-lg border border-black"
 							type="password"
-							name="password"
-							placeholder="Your Password"
 							id="password"
 							value={password}
-							// ref={userRef}
-							onChange={(e) => setPassword(e.target.value)}
-							autoComplete="off"
 							aria-invalid={validPassword ? "false" : "true"}
+							onChange={(e) => setPassword(e.target.value)}
+							aria-describedby="pwdnote"
 							onFocus={() => setPasswordFocus(true)}
 							onBlur={() => setPasswordFocus(false)}
-							required
+							autoComplete="off"
+							placeholder="Your Password"
 						/>
+						{passwordFocus && !validPassword && (
+							<small id="pwdnote" className="text-red-500 text-sm ">
+								Your password must contain at least one uppercase and lowercase
+								letter, one number, and one special character.
+							</small>
+						)}
 					</div>
 					<button
+						disabled={!validEmail || !validPassword ? true : false}
 						className="flex items-center justify-center h-10 w-80 mx-auto mb-4 text-white bg-primary-btn  text-center rounded-lg border-black"
-						>
+					>
 						Login
 					</button>
 				</form>

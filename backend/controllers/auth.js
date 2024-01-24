@@ -23,15 +23,15 @@ exports.signup = async (req, res, next) => {
 	try {
 		const hashedPwd = await bcrypt.hash(password, 12);
 		const user = new User({
-            name: name,
-            firstname: firstname,
+			name: name,
+			firstname: firstname,
 			username: username,
 			email: email,
 			password: hashedPwd,
 			image: image,
 			bio: bio,
-        });
-        console.log(user)
+		});
+		console.log(user);
 		const result = await user.save();
 		res.status(201).json({ message: "User created!", userId: result._id });
 	} catch (err) {
@@ -41,7 +41,6 @@ exports.signup = async (req, res, next) => {
 		next(err);
 	}
 };
-
 
 exports.login = async (req, res, next) => {
 	const email = req.body.email;

@@ -3,6 +3,11 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
 import "./index.css";
+
+import { Provider } from "react-redux";
+import { store, persistor } from "./store";
+import { PersistGate } from "redux-persist/integration/react";
+
 import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
 
@@ -21,17 +26,21 @@ const PageLayout = () => (
 );
 root.render(
 	<React.StrictMode>
-		<BrowserRouter>
-			<Routes>
-				<Route element={<PageLayout />}>
-					<Route path="/" element={<Home />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/register" element={<Register />} />
-				</Route>
-				<Route path="*" element={<Error404 />} />
-				<Route path="/404" element={<Error404 />} />
-			</Routes>
-		</BrowserRouter>
+		<Provider store={store}>
+			<PersistGate loading={null} persistor={persistor}>
+				<BrowserRouter>
+					<Routes>
+						<Route element={<PageLayout />}>
+							<Route path="/" element={<Home />} />
+							<Route path="/login" element={<Login />} />
+							<Route path="/register" element={<Register />} />
+						</Route>
+						<Route path="*" element={<Error404 />} />
+						<Route path="/404" element={<Error404 />} />
+					</Routes>
+				</BrowserRouter>
+			</PersistGate>
+		</Provider>
 	</React.StrictMode>
 );
 

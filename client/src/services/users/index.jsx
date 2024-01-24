@@ -10,15 +10,15 @@ export const Login = async (user) => {
 					"Content-Type": "application/json",
 				},
 			}
-        );
+		);
 		if (userLogin.status !== 400) {
-            console.log(userLogin)
+			console.log(userLogin);
 			const loginResult = {
 				status: userLogin?.status,
-				message: userLogin.message,
-				token: userLogin?.data?.token,
-            };
-            console.log(loginResult);
+				// message: userLogin.data?.message,
+				token: userLogin.data.token,
+			};
+			console.log(loginResult);
 			return loginResult;
 		}
 	} catch (error) {
@@ -26,7 +26,7 @@ export const Login = async (user) => {
 			status: error?.status,
 			message: error.message,
 		};
-        console.log(loginResultError);
-        return loginResultError;
+		console.log(loginResultError);
+		return loginResultError;
 	}
 };
