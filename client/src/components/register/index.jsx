@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useRef } from "react";
+import { Register } from "../../services/users";
 
 export default function RegisterComp() {
 	const userRef = useRef();
@@ -46,12 +47,38 @@ export default function RegisterComp() {
 		return input.length >= 4;
 	};
 
+	console.log(name, firstName, username, email, password, confirmPassword);
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		// const rxEmail = EMAIL_REGEX.test(email);
-		// const rxPassword = PASSWORD_REGEX.test(password);
-		// const rxPasswordConfirm = PASSWORD_REGEX.test(confirm);
+		const rxEmail = EMAIL_REGEX.test(email);
+		const rxPassword = PASSWORD_REGEX.test(password);
+		const rxPasswordConfirm = PASSWORD_REGEX.test(confirmPassword);
 		// adding logic to register new account
+		const register = Register({
+			name: name,
+			firstname: firstName,
+			username: username,
+			email: email,
+			password: password,
+
+		});
+		register.then((results) => {
+			if (
+				results.status === 200 &&
+				inputIsFilled(email) &&
+				inputIsFilled(password) &&
+				rxEmail &&
+				rxPassword === rxPasswordConfirm
+			) {
+				setStatus(results.status);
+				console.log(results.token);
+			} else {
+				console.log(results);
+				setErrorMessage("Your email with your password are wrong");
+			}
+			errRef.current.focus();
+		});
 	};
 
 	useEffect(() => {
@@ -89,7 +116,7 @@ export default function RegisterComp() {
 						</label>
 						<input
 							className="flex items-center justify-center h-10 w-80  mb-0 text-center rounded-lg border border-black"
-							type="name"
+							type="text"
 							id="name"
 							value={name}
 							aria-invalid={validName ? "false" : "true"}
@@ -113,7 +140,7 @@ export default function RegisterComp() {
 						</label>
 						<input
 							className="flex items-center justify-center h-10 w-80  mb-0 text-center rounded-lg border border-black"
-							type="firstName"
+							type="text"
 							id="firstName"
 							value={firstName}
 							aria-invalid={validFirstName ? "false" : "true"}
@@ -210,7 +237,7 @@ export default function RegisterComp() {
 						</label>
 						<input
 							className="flex items-center justify-center h-10 w-80  mb-0 text-center rounded-lg border border-black"
-							type="confirmPassword"
+							type="password"
 							id="confirmPassword"
 							value={confirmPassword}
 							aria-invalid={validConfirmPassword ? "false" : "true"}
