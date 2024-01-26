@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 
 const databaseLogin = require("./database/index");
 const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 
 /**
  * .env added for hidden PORT urls
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 
 app.use((error, req, res, next) => {
 	console.log(error);
