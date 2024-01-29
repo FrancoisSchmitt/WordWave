@@ -136,7 +136,7 @@ export default function LoginComp() {
 							placeholder="Your Password"
 						/>
 						{passwordFocus && !validPassword && (
-							<small id="pwdnote" className="text-red-500 text-sm ">
+							<small id="pwdnote" className="text-red-500">
 								Your password must contain at least one uppercase and lowercase
 								letter, one number, and one special character.
 							</small>
