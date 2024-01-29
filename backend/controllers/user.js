@@ -24,3 +24,9 @@ exports.userById = (req, res, next) => {
 		.then((userId) => res.status(200).json(userId))
 		.catch((error) => res.status(404).json({ error }));
 };
+
+exports.allUser = (req, res, next) => {
+	User.find()
+		.then((AllUsers) => res.status(200).json(AllUsers))
+		.catch((error) => res.status(400).json({ error }));
+};
