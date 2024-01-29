@@ -17,3 +17,10 @@ exports.userProfile = (req, res, next) => {
 		})
 		.catch((error) => res.status(404).json(error));
 };
+
+// Probably need to add some result to see posts or other 
+exports.userById = (req, res, next) => {
+	User.findOne({ _id: req.params.id })
+		.then((userId) => res.status(200).json(userId))
+		.catch((error) => res.status(404).json({ error }));
+};

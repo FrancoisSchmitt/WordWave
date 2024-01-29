@@ -5,7 +5,8 @@ const userController = require("../controllers/user");
 
 const router = express.Router();
 
-router.get("/users", isAuth, userController.userProfile);
+router.get("/userProfile", isAuth, userController.userProfile);
+router.get("/userProfile/:", isAuth, userController.userById);
 
 // router.put("/profile");
 
