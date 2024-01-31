@@ -28,6 +28,23 @@ exports.post = async (req, res, next) => {
 	}
 };
 
+exports.getPost = async (req, res, next) => {
+	const postId = req.params.postId;
+	const post = await Post.findById(postId);
+	try {
+		if (!post) {
+			const error = new Error("Could not find post.");
+			error.statusCode = 404;
+			throw error;
+		}
+		res.status(200).json({ message: "Post fetched.", post: post });
+	} catch (err) {
+		if (!err.statusCode) {
+			err.statusCode = 500;
+		}
+		next(err);
+	}
+};
 
 exports.deletePost = async (req, res, next) => {
 	const postId = req.params.postId;
@@ -44,8 +61,6 @@ exports.deletePost = async (req, res, next) => {
 			error.statusCode = 403;
 			throw error;
 		}
-		// Check logged in user
-		clearImage(post.imageUrl);
 		await Post.findByIdAndRemove(postId);
 
 		const user = await User.findById(req.userId);
