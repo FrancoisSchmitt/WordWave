@@ -7,4 +7,7 @@ const router = express.Router();
 
 router.post("/posts", isAuth, postController.post);
 
+router.delete("/post/:postId", isAuth, postController.deletePost);
+
+
 module.exports = router;
