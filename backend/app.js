@@ -1,13 +1,14 @@
 const path = require("path");
 const dotenv = require("dotenv");
 
+
 const express = require("express");
 const bodyParser = require("body-parser");
 
 const databaseLogin = require("./database/index");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
-const postsRoutes = require("./routes/posts");
+const postsRoutes = require("./routes/post");
 
 /**
  * .env added for hidden PORT urls
@@ -37,7 +38,7 @@ app.use((req, res, next) => {
 
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
-app.use("/posts", postsRoutes);
+app.use("/post", postsRoutes);
 
 app.use((error, req, res, next) => {
 	console.log(error);
@@ -49,6 +50,7 @@ app.use((error, req, res, next) => {
 
 databaseLogin();
 
-app.listen(PORT, () => {
+
+ const server = app.listen(PORT, () => {
 	console.log(`Server is running on http://localhost:${PORT}`);
 });
