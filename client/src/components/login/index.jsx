@@ -78,7 +78,7 @@ export default function LoginComp() {
 
 	useEffect(() => {
 		if (tokenSelector !== "" && status === 200) {
-			Navigate("/");
+			Navigate("/home");
 		}
 	}, [tokenSelector, status, Navigate]);
 
@@ -98,7 +98,7 @@ export default function LoginComp() {
 							Email
 						</label>
 						<input
-							className="flex items-center justify-center h-10 w-80  mb-4 text-white text-center rounded-lg border border-black"
+							className="flex items-center justify-center h-10 w-80  mb-4 text-center rounded-lg border border-black"
 							type="email"
 							id="email"
 							value={email}
@@ -106,7 +106,6 @@ export default function LoginComp() {
 							aria-invalid={validEmail ? "false" : "true"}
 							onChange={(e) => setEmail(e.target.value)}
 							required
-							autoComplete="off"
 							aria-describedby="emailnote"
 							onFocus={() => setEmailFocus(true)}
 							onBlur={() => setEmailFocus(false)}
@@ -123,7 +122,7 @@ export default function LoginComp() {
 							Password
 						</label>
 						<input
-							className="flex items-center justify-center h-10 w-80 mx-auto mb-4 text-white text-center rounded-lg border border-black"
+							className="flex items-center justify-center h-10 w-80 mx-auto mb-4 text-center rounded-lg border border-black"
 							type="password"
 							id="password"
 							value={password}
@@ -132,7 +131,6 @@ export default function LoginComp() {
 							aria-describedby="pwdnote"
 							onFocus={() => setPasswordFocus(true)}
 							onBlur={() => setPasswordFocus(false)}
-							autoComplete="off"
 							placeholder="Your Password"
 						/>
 						{passwordFocus && !validPassword && (
