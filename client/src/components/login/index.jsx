@@ -3,8 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { Login } from "../../services/users";
 import { token } from "../../store/actions";
+import { useCookies } from "react-cookie";
 
 export default function LoginComp() {
+  const [cookies, setCookie] = useCookies(["auth_token"]);
+
 	const userRef = useRef();
 	const errRef = useRef();
 	const dispatch = useDispatch();
@@ -54,6 +57,7 @@ export default function LoginComp() {
 			) {
 				setStatus(results.status);
 				dispatch(token(results.token));
+				setCookie('auth_token', results.token)
 				console.log(results.token);
 			} else {
 				console.log(results);

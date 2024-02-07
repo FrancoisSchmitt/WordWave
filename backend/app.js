@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
-app.use("/post", postsRoutes);
+app.use("/feed", postsRoutes);
 
 app.use((error, req, res, next) => {
 	console.log(error);

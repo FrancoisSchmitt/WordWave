@@ -2,10 +2,8 @@ const Post = require("../models/post");
 const User = require("../models/user");
 
 exports.post = async (req, res, next) => {
-	const title = req.body.title;
 	const content = req.body.content;
 	const post = new Post({
-		title: title,
 		content: content,
 		creator: req.userId,
 	});
@@ -17,7 +15,13 @@ exports.post = async (req, res, next) => {
 		res.status(201).json({
 			message: "Post created successfully!",
 			post: post,
-			creator: { _id: user._id, name: user.name, firstname: user.firstname },
+			creator: {
+				_id: user._id,
+				name: user.name,
+				firstname: user.firstname,
+				username: user.username,
+			},
+
 		});
 		return savedUser;
 	} catch (err) {
@@ -29,13 +33,10 @@ exports.post = async (req, res, next) => {
 };
 
 exports.getPosts = async (req, res, next) => {
-	const currentPage = req.query.page || 1;
-	const perPage = 2;
 	try {
 		const totalItems = await Post.find().countDocuments();
 		const posts = await Post.find()
-			.skip((currentPage - 1) * perPage)
-			.limit(perPage);
+
 
 		res.status(200).json({
 			message: "Fetched posts successfully.",

@@ -1,4 +1,15 @@
-export default function Feed() {
+
+import { useCookies } from "react-cookie";
+
+
+export default function Feed(props) {
+	const [cookies, setCookie] = useCookies(["auth_token"]);
+	// console.log(cookies?.auth_token);
+
+    const token = cookies?.auth_token;
+    // console.log(token)
+
+
 	return (
 		<>
 			<div className="w-6/12 mx-auto mt-4 mb-4">
@@ -10,17 +21,12 @@ export default function Feed() {
 							alt=""
 						/>
 					</li>
-					<li className="size-5 ml-4 mr-4 font-bold">name</li>
-					<li className="size-5 ml-4">username</li>
+					<li className="size-5 ml-4 mr-4 font-bold">{props.name}</li>
+					<li className="size-5 ml-4">{props.username}</li>
 				</ul>
-				<ul className="border-b-2">
+				<ul className="border-b-2 border-black">
 					<li>
-						<p>
-							Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quidem
-							ducimus facilis officia eaque explicabo provident atque blanditiis
-							odit voluptas maxime, dolor perspiciatis nihil optio fugit
-							placeat. Iure minus expedita maiores.
-						</p>
+						<p>{props.content}</p>
 					</li>
 				</ul>
 			</div>

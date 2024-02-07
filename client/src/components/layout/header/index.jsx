@@ -7,7 +7,7 @@ import {Logout} from '../../../store/actions'
 export default function Header() {
 
 	const token = useSelector((state) => state.authTokens.value);
-	console.log(token)
+	// console.log(token)
 		const dispacth = useDispatch();
 		function handleClick(event) {
 			dispacth(Logout(null));

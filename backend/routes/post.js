@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post("/posts", isAuth, postController.post);
 
-router.get("/posts", isAuth, postController.getPosts);
+router.get("/posts", postController.getPosts);
 
 router.get("/post/:postId", isAuth, postController.getPost);
 
