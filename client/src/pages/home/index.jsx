@@ -2,28 +2,31 @@ import { useEffect, useState } from "react";
 import { Feeds } from "../../services/feed";
 
 
-import Feed from "../../components/feed";
+import FeedComp from "../../components/feed";
 
 export default function Home() {
-	const [feeds, setFeeds] = useState([]);
-	useEffect(() => {
-		(async () => {
-			let projectRes = Feeds();
-			setFeeds(await projectRes);
-		})();
-	}, []);
-	const resFeeds = feeds;
-	console.log(resFeeds);
+	    const [feed, setFeed] = useState([]);
+			useEffect(() => {
+				(async () => {
+					let feedsResult = Feeds();
+					setFeed(await feedsResult);
+				})();
+			}, []);
+	const resFeeds = feed?.data;
+			console.log(resFeeds);
+
+
 	return (
 		<>
 			<section>
-				<Feed
-					name="user"
-					username="username"
-					content="test"
-
-				/>
+				{resFeeds?.posts?.map((experiment, index) => (
+					<FeedComp
+						key={`experiment-${index}`}
+						content={experiment?.content}
+					/>
+				))}
 			</section>
+
 		</>
 	);
 }

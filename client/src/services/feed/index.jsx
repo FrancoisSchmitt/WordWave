@@ -16,7 +16,7 @@ export const Feeds = async () => {
 			const feedResults = {
 				status: res?.status,
 				message: res.data?.message,
-				data: res?.data?.posts
+				data: res?.data
 			};
 			console.log(feedResults);
 			return feedResults;
